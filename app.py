@@ -1,4 +1,4 @@
-bineimport requests
+import requests
 import json
 import account_details
 
@@ -53,7 +53,8 @@ def combine_paginated_data(response_data_json, url):
 
 
 def make_get_request(url=None):
-    print(f"make_get_request started: token {token}, account_id {account_id}")
+    # print(f"make_get_request started: token {token}, account_id {account_id}")
+    print("make_get_request - start")
     headers = {'Authorization': f'Bearer {token}', 'Api-Version': 'alpha', 'Content-Type': 'application/json'}
     get_response = requests.get(url, data=None, headers=headers)
 
