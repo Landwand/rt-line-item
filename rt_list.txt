@@ -6,6 +6,58 @@
           "accounting_systemid": "y5lRP",
           "address": "",
           "amount": {
+            "amount": "100.00",
+            "code": "USD"
+          },
+          "auto_bill": false,
+          "bill_gateway": null,
+          "city": "",
+          "code": "",
+          "country": "Canada",
+          "create_date": "2018-11-28",
+          "currency_code": "USD",
+          "customerid": 466091,
+          "description": "Excess time will be billed at a rate of $300.00/hour.",
+          "disable": false,
+          "discount_total": {
+            "amount": "0.00",
+            "code": "USD"
+          },
+          "discount_value": "0",
+          "due_offset_days": 30,
+          "ext_archive": null,
+          "fname": "",
+          "frequency": "12m",
+          "id": 45140,
+          "include_unbilled_time": false,
+          "language": "en",
+          "lname": "",
+          "notes": "",
+          "numberRecurring": 1,
+          "occurrences_to_date": 1,
+          "organization": "Adamadamadam",
+          "ownerid": 1,
+          "payment_details": "",
+          "po_number": null,
+          "profileid": 45140,
+          "province": "",
+          "require_auto_bill": false,
+          "retainer_id": 562,
+          "send_email": true,
+          "send_gmail": false,
+          "street": "",
+          "street2": "",
+          "terms": null,
+          "total_accrued_revenue": null,
+          "updated": "2018-11-28 14:38:57",
+          "vat_name": null,
+          "vat_number": null,
+          "vis_state": 0
+        },
+        {
+          "accounting_systemid": "y5lRP",
+          "address": "",
+          "amount": {
             "amount": "500.00",
             "code": "USD"
           },
@@ -266,7 +318,7 @@
       "page": 5,
       "pages": 5,
       "per_page": 15,
-      "total": 65
+      "total": 66
     }
   }
 }

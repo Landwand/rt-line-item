@@ -4,3 +4,5 @@ account_details.py
 __pycache__/bearer_token.cpython-311.pyc
 /__pycache__/bearer_token.cpython-311.pyc
 __pycache__/
+notes.txt
+test.py
