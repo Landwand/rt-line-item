@@ -59,7 +59,6 @@ class InvoiceProfileObj(BaseModel):
     invoice_profile: InvoiceProfileDetails
 
 
-
 def combine_paginated_data(response_data_json, url):
     response_list =[]
 
@@ -102,8 +101,6 @@ def combine_paginated_data(response_data_json, url):
 
 
 def make_get_request(url=None):
-    # print(f"make_get_request started: token {token}, account_id {account_id}")
-    # print (f"URL = {url}")
     print("make_get_request - start")
     headers = {'Authorization': f'Bearer {token}', 'Api-Version': 'alpha', 'Content-Type': 'application/json'}
     get_response = requests.get(url, data=None, headers=headers)
@@ -177,7 +174,6 @@ def print_rt_id_list(rt_list):
             break
 
 
-
 def get_rt_id_list():
     url = f"https://api.freshbooks.com/accounting/account/{account_id}/invoice_profiles/invoice_profiles"  
     response_json = make_get_request(url)
@@ -186,43 +182,108 @@ def get_rt_id_list():
     return rt_list
 
 
-def show_rt_lines(id_list):
+def prompt_for_valid_line_number(lines_json):
     while True:
-        id = (input ("Enter an RT to show lines from: "))
-
-        if id == " ":
-            id = 91785
-        id = int(id)
-        
-        if id in id_list:
-            url = f"https://api.freshbooks.com/accounting/account/{account_id}/invoice_profiles/invoice_profiles/{id}?include%5B%5D=allowed_gateways&include%5B%5D=contacts&include%5B%5D=invoice_profile_customized_email&include%5B%5D=late_fee&include%5B%5D=late_reminders&include%5B%5D=lines&include%5B%5D=presentation&include%5B%5D=system&include%5B%5D=tracking&include%5B%5D=project_format&include%5B%5D=total_accrued_revenue"
-
-            line_json_data = make_get_request(url=url)
-            line_json_data = line_json_data['response']['result']['invoice_profile']
-            rt_lines_model = Lines(**line_json_data)
-            rt_lines_dump = rt_lines_model.model_dump()
-            print(f"L I N E   I T E M S:")
-            for line in rt_lines_dump['lines']:
-                print("")
-                print(f"===== Line ID :: {line['lineid']} ======")
-                for key, value in line.items(): # Dict method
-                    print(f"'{key}'  :  '{value}'")
-                
+        try: 
+            target_line_id = input("Enter a line # for editing: ")
+            target_line_id = int(target_line_id)
+            for line in lines_json['lines']:
+                if target_line_id == int(line['lineid']):
+                    print("prompt_for_valid_line_number: valid line ID found")
+                    target_line_json = line
+                    # print("target_line_json is ", target_line_json)
+                    return target_line_id, target_line_json
+                else: 
+                    continue
+        except:
+            print("Invalid number: it must be an Integer.")
 
 
-                
+def print_rt_lines(lines_json):
+    # print(type(rt_lines_dump))
+    print(f"L I N E   I T E M S:")
+    for line in lines_json['lines']:
+        print("")
+        print(f"===== Line ID :: {line['lineid']} ======")
+        for key, value in line.items(): # Dict method
+            print(f"'{key}'  :  '{value}'")
+
+
+def prompt_for_valid_target_rt(id_list):
+    while True:
+        try:
+            id = (input ("Enter an RT to show lines from, or use S P A C E for default: "))
+            if id == " ": 
+                id = 91785
+            id = int(id)      
+            if id in id_list:
+                return id
+        except:
+            print("Invalid ID - try again.")
+
+
+def get_lines_json_from_target_rt(target_id):
+    url = f"https://api.freshbooks.com/accounting/account/{account_id}/invoice_profiles/invoice_profiles/{target_id}?include%5B%5D=allowed_gateways&include%5B%5D=contacts&include%5B%5D=invoice_profile_customized_email&include%5B%5D=late_fee&include%5B%5D=late_reminders&include%5B%5D=lines&include%5B%5D=presentation&include%5B%5D=system&include%5B%5D=tracking&include%5B%5D=project_format&include%5B%5D=total_accrued_revenue"
+
+    template_result = make_get_request(url=url)
+    line_json_data = template_result['response']['result']['invoice_profile']
+    rt_lines_model = Lines(**line_json_data)
+    rt_lines_dump = rt_lines_model.model_dump()
+    return rt_lines_dump
+
+
+def prompt_for_line_changes(target_line_id, target_line_json):
+
+    def print_dict_k_v(dict):
+        for key, value in dict.items():
+            print ("Type of Value: ", type(value))
+            print("-----")
+            change = ""
+            if type(value) == dict:
+                print("Dict type found -----")
+                print_dict_k_v(value)
+            else:
+                print ("Type is not Dict --")
+                while True:
+                    try:
+                        field_changes = {key: value}
+                        print (f"{key} : {value}")
+
+                        change = input ("type in your change or press SPACE to skip: ")
+                        if change == " ":
+                            continue
+                        elif change == "q":
+                            print ("Quitting program")
+                            break
+                        else:
+                            if change:
+                                field_changes[key] = value
+                                print (f"Field changed: {field_changes}")
+                                print (f" Dict is now: {field_changes}")
+                                continue                          
+                        break
+
+                    except:
+                        print("Invalid input.")
+
+    target_line = target_line_json['lineid']
+    changed_line = []
+    print("prompt_for_line_changes")
+    print(target_line_json)
+    print_dict_k_v(target_line_json)``
+
             
-            break
-        print("Error: Profile not in list of IDs.")
-        
-
-
 
 
 ## Main Program ##
-rt_list = get_rt_id_list()
-#print_rt_id_list(rt_list)
-show_rt_lines(rt_list)
+rt_id_list = get_rt_id_list()
+target_id = prompt_for_valid_target_rt(rt_id_list)
+lines_json = get_lines_json_from_target_rt(target_id)
+print_rt_lines(lines_json)
+target_line_id, target_line_json = prompt_for_valid_line_number(lines_json)
+prompt_for_line_changes(target_line_id, target_line_json)
+
+
 
 """
 RT examples
@@ -233,6 +294,6 @@ RT examples
 
 """
 
-
 print("")
 print("Program Done!")
+

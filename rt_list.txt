@@ -6,6 +6,58 @@
           "accounting_systemid": "y5lRP",
           "address": "",
           "amount": {
+            "amount": "210.00",
+            "code": "USD"
+          },
+          "auto_bill": false,
+          "bill_gateway": null,
+          "city": "",
+          "code": "",
+          "country": "",
+          "create_date": "2018-12-10",
+          "currency_code": "USD",
+          "customerid": 223335,
+          "description": "double sided side-sword, 25 inches, with cross-guard",
+          "disable": false,
+          "discount_total": {
+            "amount": "0.00",
+            "code": "USD"
+          },
+          "discount_value": "0",
+          "due_offset_days": 30,
+          "ext_archive": null,
+          "fname": "Zaku",
+          "frequency": "m",
+          "id": 46074,
+          "include_unbilled_time": false,
+          "language": "en",
+          "lname": "II",
+          "notes": "",
+          "numberRecurring": 3,
+          "occurrences_to_date": 3,
+          "organization": "Zaku II",
+          "ownerid": 1,
+          "payment_details": "",
+          "po_number": null,
+          "profileid": 46074,
+          "province": "",
+          "require_auto_bill": false,
+          "retainer_id": null,
+          "send_email": true,
+          "send_gmail": false,
+          "street": "",
+          "street2": "",
+          "terms": null,
+          "total_accrued_revenue": null,
+          "updated": "2018-12-10 17:09:30",
+          "vat_name": null,
+          "vat_number": null,
+          "vis_state": 0
+        },
+        {
+          "accounting_systemid": "y5lRP",
+          "address": "",
+          "amount": {
             "amount": "100.00",
             "code": "USD"
           },
@@ -318,7 +370,7 @@
       "page": 5,
       "pages": 5,
       "per_page": 15,
-      "total": 66
+      "total": 67
     }
   }
 }
