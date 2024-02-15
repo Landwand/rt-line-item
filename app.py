@@ -232,47 +232,104 @@ def get_lines_json_from_target_rt(target_id):
     return rt_lines_dump
 
 
+# def prompt_for_line_changes(target_line_id, target_line_json):
+
+#     def print_dict_k_v(incoming_dict):
+#         for key, value in incoming_dict.items():
+#             print ("Type of Value: ", type(value))
+#             print("-----")
+#             change = ""
+#             if type(value) == dict:
+#                 print("Dict type found -----")
+#                 print_dict_k_v(value)
+#             else:
+#                 print ("Type is not Dict --")
+#                 while True:
+#                     try:
+#                         field_changes = {key: value}
+#                         print (f"{key} : {value}")
+
+#                         change = input ("type in your change or press SPACE to skip: ")
+#                         if change == " ":
+#                             continue
+#                         elif change == "q":
+#                             print ("Quitting program")
+#                             break
+#                         else:
+#                             if change:
+#                                 field_changes[key] = value
+#                                 print (f"Field changed: {field_changes}")
+#                                 print (f" Dict is now: {field_changes}")
+#                                 continue                          
+#                         break
+
+#                     except:
+#                         print("Invalid input.")
+
+#     target_line = target_line_json['lineid']
+#     changed_line = []
+#     print("prompt_for_line_changes")
+#     print(target_line_json)
+#     print_dict_k_v(target_line_json)``
+
+
 def prompt_for_line_changes(target_line_id, target_line_json):
+    print ("function start")
+    print (target_line_json)
+    replacement = {}
 
-    def print_dict_k_v(dict):
-        for key, value in dict.items():
-            print ("Type of Value: ", type(value))
-            print("-----")
+    def prompt_value_change(incoming_d):
+        
+        keys_to_skip = [
+            'lineid',
+            'modern_projectid',
+            'code',
+            'taskno',
+            'compounded_tax'
+        ]
+
+        for key, value in incoming_d.items():
+            print("Replacement start as: ")
+            print (replacement)
+            replacement[key] = value # set the default
+
+            if key in keys_to_skip:
+                replacement[key] = value
+                continue
+
             change = ""
-            if type(value) == dict:
-                print("Dict type found -----")
-                print_dict_k_v(value)
+            # if type(value) is dict:
+            if isinstance(value, dict):
+                print(f"Nested Dict found in {key}")
+                prompt_value_change(value)
             else:
-                print ("Type is not Dict --")
-                while True:
-                    try:
-                        field_changes = {key: value}
-                        print (f"{key} : {value}")
+                try:
+                    print("")
+                    print (f"CURRENT: {key} : {value}")
+                    change = input ("type in your change or press SPACE to skip: ")
+                    if change == " ":
+                        continue
+                    elif change == "q":
+                        print ("Quitting program")
+                        quit()
+                    else:
+                        if change:
+                            replacement[key] = change
+                            print (f" *** Change added {key} : {replacement[key]}")
+                            continue                          
+                    break
+                except:
+                    print("Invalid input.")
 
-                        change = input ("type in your change or press SPACE to skip: ")
-                        if change == " ":
-                            continue
-                        elif change == "q":
-                            print ("Quitting program")
-                            break
-                        else:
-                            if change:
-                                field_changes[key] = value
-                                print (f"Field changed: {field_changes}")
-                                print (f" Dict is now: {field_changes}")
-                                continue                          
-                        break
+        print("Final Replacement is == ")
+        print (replacement)
 
-                    except:
-                        print("Invalid input.")
+        return replacement
 
-    target_line = target_line_json['lineid']
-    changed_line = []
-    print("prompt_for_line_changes")
-    print(target_line_json)
-    print_dict_k_v(target_line_json)``
-
-            
+    
+    line_changes = prompt_value_change(target_line_json)
+    return line_changes
+       
 
 
 ## Main Program ##
@@ -281,7 +338,10 @@ target_id = prompt_for_valid_target_rt(rt_id_list)
 lines_json = get_lines_json_from_target_rt(target_id)
 print_rt_lines(lines_json)
 target_line_id, target_line_json = prompt_for_valid_line_number(lines_json)
-prompt_for_line_changes(target_line_id, target_line_json)
+changed_line = prompt_for_line_changes(target_line_id, target_line_json)
+
+print("Changed line ==")
+print(changed_line)
 
 
 
