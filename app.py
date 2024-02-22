@@ -291,6 +291,7 @@ def prompt_for_line_changes(target_line_id, target_line_json):
         for key, value in incoming_d.items():
             print("Replacement start as: ")
             print (replacement)
+            print ("")
             replacement[key] = value # set the default
 
             if key in keys_to_skip:
@@ -321,8 +322,27 @@ def prompt_for_line_changes(target_line_id, target_line_json):
                 except:
                     print("Invalid input.")
 
-        print("Final Replacement is == ")
-        print (replacement)
+        def test_1(incoming_d):
+            print ("Test_1 starting")
+            try: 
+                for pair in incoming_d:
+                    for key, value in pair:
+                        print("Replacement = ")
+                        print (replacement)
+                        print ("")
+                        print (key, value)
+            except:
+                print("Error -- exception! ")
+                print (target_line_json)
+    
+
+        # print("Original line is")
+        # print(target_line_json)
+        # print("")
+        # print("Replacement Line is == ")
+        # print (replacement)
+                
+        test_1(target_line_json)
 
         return replacement
 
@@ -338,6 +358,11 @@ target_id = prompt_for_valid_target_rt(rt_id_list)
 lines_json = get_lines_json_from_target_rt(target_id)
 print_rt_lines(lines_json)
 target_line_id, target_line_json = prompt_for_valid_line_number(lines_json)
+
+with open("target_line_json.txt", "w") as file:
+    file.write(json.dumps((target_line_json)))
+
+
 changed_line = prompt_for_line_changes(target_line_id, target_line_json)
 
 print("Changed line ==")

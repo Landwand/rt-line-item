@@ -1,0 +1,1 @@
+{"amount": {"amount": 100000.0, "code": "CAD"}, "lineid": 8, "modern_projectid": null, "taskno": 6, "taxAmount1": 0, "taxAmount2": 0, "taxName1": null, "taxName2": null, "compounded_tax": false, "description": "Steel helm for citadel guard", "name": "Gondorian Helm"}
